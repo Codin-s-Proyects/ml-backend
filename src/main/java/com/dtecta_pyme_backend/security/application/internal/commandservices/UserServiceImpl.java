@@ -5,6 +5,7 @@ import com.dtecta_pyme_backend.security.domain.model.aggregates.User;
 import com.dtecta_pyme_backend.security.domain.services.UserService;
 import com.dtecta_pyme_backend.security.infrastructure.persistence.jpa.repositories.RoleRepository;
 import com.dtecta_pyme_backend.security.infrastructure.persistence.jpa.repositories.UserRepository;
+import com.dtecta_pyme_backend.security.interfaces.rest.resources.RecoverPasswordResource;
 import com.dtecta_pyme_backend.security.interfaces.rest.resources.SignInResource;
 import com.dtecta_pyme_backend.security.interfaces.rest.resources.SignUpResource;
 import com.dtecta_pyme_backend.shared.domain.exceptions.AuthenticatedException;
@@ -63,5 +64,23 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new ServerErrorException();
         }
+    }
+
+    @Override
+    public Optional<User> recoverPassword(RecoverPasswordResource resource) {
+        var user = userRepository.findByUsername(resource.email());
+
+        if (user == null)
+            throw new NotFoundException("Not found user with that email");
+
+        user.updatePassword(hashingService.encode(resource.password()));
+
+
+        try {
+            return Optional.of(userRepository.save(user));
+        } catch (Exception e) {
+            throw new ServerErrorException();
+        }
+
     }
 }

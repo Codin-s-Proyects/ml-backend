@@ -1,7 +1,9 @@
 package com.dtecta_pyme_backend.security.interfaces.rest;
 import com.dtecta_pyme_backend.security.application.internal.outboundservices.tokens.TokenService;
+import com.dtecta_pyme_backend.security.domain.model.aggregates.User;
 import com.dtecta_pyme_backend.security.domain.services.UserService;
 import com.dtecta_pyme_backend.security.interfaces.rest.resources.AuthenticatedUserResource;
+import com.dtecta_pyme_backend.security.interfaces.rest.resources.RecoverPasswordResource;
 import com.dtecta_pyme_backend.security.interfaces.rest.resources.SignInResource;
 import com.dtecta_pyme_backend.security.interfaces.rest.resources.SignUpResource;
 import com.dtecta_pyme_backend.shared.domain.exceptions.BadRequestException;
@@ -55,6 +57,18 @@ public class AuthenticationController {
 
         var createUserResource = new SignInResource(user.get().getUsername(), token);
         return new ResponseEntity<>(createUserResource, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping("/recover-password")
+    public ResponseEntity<User> signUp(@RequestBody RecoverPasswordResource recoverPasswordResource) {
+        var user = userService.recoverPassword(recoverPasswordResource);
+
+        if (user.isEmpty()) {
+            throw new NotFoundException("Not found user");
+        }
+
+        return new ResponseEntity<>(user.get(), HttpStatus.CREATED);
     }
 
 }

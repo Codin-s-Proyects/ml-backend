@@ -63,4 +63,9 @@ public class User {
         this.role = role;
     }
 
+    public User updatePassword(String password) {
+        this.password = password;
+        return this;
+    }
+
 }
