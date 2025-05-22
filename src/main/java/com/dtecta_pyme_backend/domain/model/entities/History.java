@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "histories")
+@Getter
 public class History {
     @Id
     @Getter
@@ -18,8 +19,8 @@ public class History {
     @Column(name = "name", nullable = false, length = 8)
     private String name;
 
-    @Getter
-    @Column(name = "report", nullable = false, length = 8)
+    @Lob
+    @Column(name = "report", nullable = false)
     private String report;
 
     @Getter
