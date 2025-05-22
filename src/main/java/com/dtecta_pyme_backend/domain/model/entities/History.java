@@ -16,7 +16,7 @@ public class History {
     private Long id;
 
     @Getter
-    @Column(name = "name", nullable = false, length = 8)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Lob
