@@ -1,0 +1,38 @@
+package com.dtecta_pyme_backend.domain.model.entities;
+
+import com.dtecta_pyme_backend.interfaces.rest.resources.history.CreateHistoryResource;
+import jakarta.persistence.*;
+import lombok.Getter;
+
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "histories")
+public class History {
+    @Id
+    @Getter
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Getter
+    @Column(name = "name", nullable = false, length = 8)
+    private String name;
+
+    @Getter
+    @Column(name = "report", nullable = false, length = 8)
+    private String report;
+
+    @Getter
+    @Column(name = "date", nullable = false, length = 8)
+    private LocalDate date;
+
+    public History() {}
+
+    public History(CreateHistoryResource resource) {
+        this.name = resource.name();
+        this.report = resource.report();
+        this.date = LocalDate.now();
+    }
+
+
+}
